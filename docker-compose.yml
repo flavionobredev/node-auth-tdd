@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  postgres-db:
+    image: postgres:11.12
+    container_name: postgres-db
+    restart: on-failure
+    tty: true
+    environment:
+      POSTGRES_DB: nodeauth
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+    volumes:
+      - ./infra/.docker/postgres/dbdata:/var/lib/postgresql/data
+    networks:
+      - nodeauth
+
+  node-auth:
+    build:
+      context: ./
+    container_name: node-auth
+    tty: true
+    entrypoint: sh ./infra/.docker/entrypoint.sh
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/usr/node-auth/app
+    networks:
+      - nodeauth
+
+networks:
+  nodeauth:
+    driver: bridge
