@@ -4,19 +4,26 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "env": "rm -rf .env && cp .env.example .env",
-    "start:dev": "nodemon ./src/server.js --ignore node_modules --watch"
+    "env": "rm -rf .env .env.test && cp .env.example .env && cp .env.test.example .env.test",
+    "start:dev": "nodemon ./src/server.js --ignore node_modules test --watch",
+    "pretest": "NODE_ENV=test npx sequelize db:migrate",
+    "test": "NODE_ENV=test jest",
+    "posttest": "NODE_ENV=test npx sequelize db:migrate:undo:all"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "pg": "^8.7.1",
     "sequelize": "^6.6.5"
   },
   "devDependencies": {
+    "jest": "^27.1.0",
     "nodemon": "^2.0.12",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "sqlite3": "^5.0.2",
+    "supertest": "^6.1.6"
   }
 }
