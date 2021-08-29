@@ -10,8 +10,24 @@ services:
       POSTGRES_DB: nodeauth
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
+    ports:
+      - 5432:5432
     volumes:
-      - ./infra/.docker/postgres/dbdata:/var/lib/postgresql/data
+      - ./src/infra/.docker/postgres/dbdata:/var/lib/postgresql/data
+    networks:
+      - nodeauth
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "root@docker.com"
+      PGADMIN_DEFAULT_PASSWORD: "docker"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-db
+    volumes:
+      - ./src/infra/.docker/postgres/pgadmin:/root
     networks:
       - nodeauth
 
@@ -20,7 +36,7 @@ services:
       context: ./
     container_name: node-auth
     tty: true
-    entrypoint: sh ./infra/.docker/entrypoint.sh
+    entrypoint: sh ./src/infra/.docker/entrypoint.sh
     ports:
       - 3000:3000
     volumes:
