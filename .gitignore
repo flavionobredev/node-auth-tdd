@@ -1,3 +1,10 @@
+# ignore dev folders
 node_modules
 .vscode
 .env
+
+# ignore pg volume
+./src/infra/.docker/postgres/dbdata/*
+
+# ignore pg admin
+./src/infra/.docker/postgres/pgadmin/*
